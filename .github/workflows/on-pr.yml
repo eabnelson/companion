@@ -1,0 +1,11 @@
+name: on-pr
+on:
+    pull_request:
+
+jobs:
+    main:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
