@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Req } from '@nestjs/common';
+import { Controller, Get, Res, Req, Param } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { apiEnv } from '../environments/environment';
 import { JsonRpcProvider, ethers } from 'ethers';
@@ -11,15 +11,11 @@ const { api } = apiEnv;
 @Controller()
 export class AppController {
 	private provider: ethers.JsonRpcProvider;
-	private channel: ethers.Contract;
 	private channelFactory: ethers.Contract;
 
 	constructor() {
 		this.provider = new JsonRpcProvider(api.rpc);
 
-		console.log('ChannelFactory.address:', ChannelFactory.address);
-
-		this.channel = new ethers.Contract(Channel.address, Channel.abi, this.provider);
 		this.channelFactory = new ethers.Contract(
 			ChannelFactory.address,
 			ChannelFactory.abi,
@@ -41,10 +37,12 @@ export class AppController {
 	}
 
 	// Get details and posts from a given channel
-	@Get('channeldetails')
-	async getChannelFeed(@Req() request: Request, @Res() res: Response) {
+	@Get('channel/:channelAddress')
+	async getChannelFeed(@Param('channelAddress') channelAddress: string, @Res() res: Response) {
 		try {
-			const channelDetails = await this.channel.queryChannel();
+			const channel = new ethers.Contract(channelAddress, Channel.abi, this.provider);
+
+			const channelDetails = await channel.queryChannel();
 
 			const [owner, title, symbol, description] = channelDetails[0];
 
