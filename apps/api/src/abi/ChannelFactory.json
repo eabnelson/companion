@@ -1,0 +1,67 @@
+{
+	"address": "0x0118d7720B92A29F6653572bd95555c07CAed4CA",
+	"abi": [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "channelAddress",
+					"type": "address"
+				},
+				{ "indexed": false, "internalType": "string", "name": "title", "type": "string" },
+				{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+			],
+			"name": "ChannelCreated",
+			"type": "event"
+		},
+		{
+			"inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+			"name": "channels",
+			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "symbol", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" }
+					],
+					"internalType": "struct Channel.ChannelParams",
+					"name": "channel",
+					"type": "tuple"
+				}
+			],
+			"name": "createChannel",
+			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "string", "name": "title", "type": "string" }],
+			"name": "getChannelByTitle",
+			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getChannels",
+			"outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "address", "name": "owner", "type": "address" }],
+			"name": "getChannelsByOwner",
+			"outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}

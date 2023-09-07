@@ -31,6 +31,7 @@
 		"cookies-next": "^2.1.2",
 		"cors": "^2.8.5",
 		"encoding": "^0.1.13",
+		"ethers": "^6.7.1",
 		"express-session": "^1.17.3",
 		"ioredis": "^5.3.2",
 		"js-cookie": "^3.0.5",

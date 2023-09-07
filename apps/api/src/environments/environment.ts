@@ -9,7 +9,8 @@ export const apiEnv: IApiEnv = {
 		host: isProd ? process.env.API_HOST_PROD : process.env.API_HOST,
 		appUri: isProd ? process.env.APP_URL_PROD : process.env.APP_URL,
 		apiUri: isProd ? process.env.API_URL_PROD : process.env.API_URL,
-		domain: isProd ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV
+		domain: isProd ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV,
+		rpc: isProd ? process.env.RPC_PROD : process.env.RPC_DEV
 	}
 };
 
@@ -21,5 +22,6 @@ export interface IApiEnv {
 		appUri: string;
 		apiUri: string;
 		domain: string;
+		rpc: string;
 	};
 }

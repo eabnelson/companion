@@ -1,0 +1,313 @@
+{
+	"address": "0x82E6075D7cd3555264b26b1a11a41B0625Bf7Bc7",
+	"abi": [
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "symbol", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" }
+					],
+					"internalType": "struct Channel.ChannelParams",
+					"name": "channel",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "newOwner",
+					"type": "address"
+				}
+			],
+			"name": "OwnerUpdated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{ "indexed": true, "internalType": "uint256", "name": "postId", "type": "uint256" },
+				{ "indexed": false, "internalType": "string", "name": "title", "type": "string" },
+				{ "indexed": false, "internalType": "address", "name": "author", "type": "address" }
+			],
+			"name": "PostCreated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{ "indexed": true, "internalType": "uint256", "name": "postId", "type": "uint256" },
+				{ "indexed": false, "internalType": "string", "name": "title", "type": "string" },
+				{ "indexed": false, "internalType": "address", "name": "author", "type": "address" }
+			],
+			"name": "PostDeleted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{ "indexed": true, "internalType": "uint256", "name": "postId", "type": "uint256" },
+				{ "indexed": false, "internalType": "string", "name": "title", "type": "string" },
+				{ "indexed": false, "internalType": "address", "name": "author", "type": "address" }
+			],
+			"name": "PostUpdated",
+			"type": "event"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post",
+					"name": "post",
+					"type": "tuple"
+				}
+			],
+			"name": "createPost",
+			"outputs": [
+				{ "internalType": "uint256", "name": "", "type": "uint256" },
+				{ "internalType": "string", "name": "", "type": "string" }
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "uint256", "name": "postId", "type": "uint256" }],
+			"name": "deletePost",
+			"outputs": [
+				{ "internalType": "uint256", "name": "", "type": "uint256" },
+				{ "internalType": "string", "name": "", "type": "string" }
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "description",
+			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getAllPosts",
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post[]",
+					"name": "",
+					"type": "tuple[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "uint256", "name": "postId", "type": "uint256" }],
+			"name": "getPostById",
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "string", "name": "postTitle", "type": "string" }],
+			"name": "getPostByTitle",
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "owner",
+			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+			"name": "posts",
+			"outputs": [
+				{ "internalType": "uint256", "name": "id", "type": "uint256" },
+				{ "internalType": "address", "name": "author", "type": "address" },
+				{ "internalType": "string", "name": "authorName", "type": "string" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "link", "type": "string" },
+				{ "internalType": "string", "name": "description", "type": "string" },
+				{ "internalType": "string", "name": "content", "type": "string" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+			"name": "postsById",
+			"outputs": [
+				{ "internalType": "uint256", "name": "id", "type": "uint256" },
+				{ "internalType": "address", "name": "author", "type": "address" },
+				{ "internalType": "string", "name": "authorName", "type": "string" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "link", "type": "string" },
+				{ "internalType": "string", "name": "description", "type": "string" },
+				{ "internalType": "string", "name": "content", "type": "string" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "string", "name": "", "type": "string" }],
+			"name": "postsByTitle",
+			"outputs": [
+				{ "internalType": "uint256", "name": "id", "type": "uint256" },
+				{ "internalType": "address", "name": "author", "type": "address" },
+				{ "internalType": "string", "name": "authorName", "type": "string" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "link", "type": "string" },
+				{ "internalType": "string", "name": "description", "type": "string" },
+				{ "internalType": "string", "name": "content", "type": "string" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "queryChannel",
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "symbol", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" }
+					],
+					"internalType": "struct Channel.ChannelParams",
+					"name": "",
+					"type": "tuple"
+				},
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post[]",
+					"name": "",
+					"type": "tuple[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "symbol",
+			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "title",
+			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+			"name": "udpateOwner",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "content", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.Post",
+					"name": "post",
+					"type": "tuple"
+				}
+			],
+			"name": "updatePost",
+			"outputs": [
+				{ "internalType": "uint256", "name": "", "type": "uint256" },
+				{ "internalType": "string", "name": "", "type": "string" }
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}
