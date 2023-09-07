@@ -45,26 +45,40 @@ export class AppController {
 	async getChannelFeed(@Req() request: Request, @Res() res: Response) {
 		try {
 			const channelDetails = await this.channel.queryChannel();
-			const processedDetails = convertBigIntPropsToString(channelDetails);
-			return res.json({ processedDetails });
+
+			const [owner, title, symbol, description] = channelDetails[0];
+
+			// Create a structured Channel object
+			const channelData = {
+				owner,
+				title,
+				symbol,
+				description
+			};
+
+			// Create a structured Post array and filter out the deleted posts
+			const posts = channelDetails[1]
+				.map((item) => {
+					const [id, author, authorName, title, link, description, content, deleted] =
+						item;
+					return {
+						id: id.toString(), // Convert the postId from BigInt to string
+						author,
+						authorName,
+						title,
+						link,
+						description,
+						content,
+						deleted
+					};
+				})
+				.filter((post) => !post.deleted); // Filter out the posts where deleted is true
+
+			return res.json({ channel: channelData, posts: posts });
 		} catch (error) {
 			return res
 				.status(500)
 				.json({ message: 'Failed to get channel details', error: error.message });
 		}
 	}
-}
-
-function convertBigIntPropsToString(obj: any): any {
-	const newObj = {};
-	for (const key in obj) {
-		if (typeof obj[key] === 'bigint') {
-			newObj[key] = obj[key].toString();
-		} else if (typeof obj[key] === 'object' && obj[key] !== null) {
-			newObj[key] = convertBigIntPropsToString(obj[key]);
-		} else {
-			newObj[key] = obj[key];
-		}
-	}
-	return newObj;
 }
