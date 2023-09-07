@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Req, Param } from '@nestjs/common';
+import { Controller, Get, Res, Req, Param, Post, Body } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { apiEnv } from '../environments/environment';
 import { JsonRpcProvider, ethers } from 'ethers';
@@ -141,6 +141,57 @@ export class AppController {
 			return res
 				.status(500)
 				.json({ message: 'Failed to get channel details', error: error.message });
+		}
+	}
+
+	// Create a new post for a channel
+	@Post('channel/:channelAddress/create-post')
+	async createPost(
+		@Param('channelAddress') channelAddress: string,
+		@Body()
+		postData: {
+			authorName: string;
+			title: string;
+			link: string;
+			description: string;
+			content: string;
+		},
+		@Res() res: Response
+	) {
+		try {
+			const channel = new ethers.Contract(channelAddress, Channel.abi, this.provider);
+			const { authorName, title, link, description, content } = postData;
+
+			const post = [
+				0, // id is set by the contract
+				'0x0000000000000000000000000000000000000000', // author is set by the contract
+				authorName,
+				title,
+				link,
+				description,
+				content,
+				false
+			];
+
+			const privateKey = api.pk;
+
+			const wallet = new ethers.Wallet(privateKey, this.provider);
+
+			const channelWithSigner = channel.connect(wallet) as any;
+
+			const txResponse = await channelWithSigner.createPost(post);
+			const txReceipt = await txResponse.wait();
+
+			if (txReceipt && txReceipt.status == 1) {
+				return res.status(201).json({
+					message: 'Post created successfully',
+					txHash: txReceipt.transactionHash
+				});
+			} else {
+				return res.status(500).json({ message: 'Create post transaction failed' });
+			}
+		} catch (error) {
+			return res.status(500).json({ message: 'Failed to create post', error: error.message });
 		}
 	}
 }
