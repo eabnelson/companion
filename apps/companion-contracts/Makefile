@@ -27,7 +27,7 @@ MATCH_TEST=--match-test $(TEST)
 RPC=https://eth-mainnet.alchemyapi.io/v2/$(ALCHEMY_API_MAINNET_KEY)
 
 # Sepolia rpc url 
-TESTNET_RPC=https://sepolia.infura.io/v3/$(INFURA_API_KEY)
+TESTNET_RPC=https://rpc.ankr.com/base_goerli
 
 # fork from rpc
 FORK_URL=--fork-url $(RPC)
@@ -100,3 +100,7 @@ deploy_mainnet :; forge create $(DEPLOY_MAINNET)
 
 # Deploy a contract to sepolia (assumes file and contract name match) "make deploy_sepolia FILE=<filename>"
 deploy_sepolia :; forge create $(DEPLOY_SEPOLIA)
+
+# Deploy contracts using the forge script
+forge_script :; forge script script/ChannelFactory.s.sol:ChannelFactoryScript --rpc-url $(TESTNET_RPC) $(KEY) --broadcast --verify --chain-id 84531 -vvvv 
+
