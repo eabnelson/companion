@@ -102,5 +102,5 @@ deploy_mainnet :; forge create $(DEPLOY_MAINNET)
 deploy_sepolia :; forge create $(DEPLOY_SEPOLIA)
 
 # Deploy contracts using the forge script
-forge_script :; forge script script/ChannelFactory.s.sol:ChannelFactoryScript --rpc-url $(TESTNET_RPC) $(KEY) --broadcast --verify --chain-id 84531 -vvvv 
+forge_deploy_testnet :; forge script script/ChannelFactory.s.sol:ChannelFactoryScript --rpc-url $(TESTNET_RPC) $(KEY) --broadcast --verify --chain-id 84531 -vvvv 
 

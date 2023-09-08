@@ -27,7 +27,6 @@ contract Channel {
 
 	Post[] public posts; // All posts
 	mapping(uint256 => Post) public postsById; // id => Post
-	mapping(string => Post) public postsByTitle; // title => Post
 
 	event OwnerUpdated(address indexed newOwner);
 	event PostCreated(uint256 indexed postId, string title, address author);
@@ -79,8 +78,8 @@ contract Channel {
 		return postsById[postId];
 	}
 
-	function getPostByTitle(string memory postTitle) external view returns (Post memory) {
-		return postsByTitle[postTitle];
+	function getPostByIndex(uint256 index) public view returns (Channel.Post memory) {
+		return posts[index];
 	}
 
 	function queryChannel() external view returns (ChannelParams memory, Post[] memory) {
@@ -104,27 +103,25 @@ contract Channel {
 
 		posts.push(post);
 		postsById[post.id] = post;
-		postsByTitle[post.title] = post;
 		emit PostCreated(post.id, post.title, post.author);
 
 		return (post.id, post.title);
 	}
 
 	function _updatePost(Post memory postUpdates) internal returns (uint256, string memory) {
-		Post storage post = postsById[postUpdates.id];
-		require(post.id > 0, 'post does not exist');
+		require(postUpdates.id > 0 && postUpdates.id <= posts.length, 'post does not exist');
 
 		_checkPost(postUpdates);
 
-		post.authorName = postUpdates.authorName;
-		post.title = postUpdates.title;
-		post.link = postUpdates.link;
-		post.description = postUpdates.description;
-		post.content = postUpdates.content;
+		// Update the post in the posts array
+		posts[postUpdates.id - 1] = postUpdates;
 
-		emit PostUpdated(post.id, post.title, post.author);
+		// Update the post in the postsById mapping
+		postsById[postUpdates.id] = postUpdates;
 
-		return (post.id, post.title);
+		emit PostUpdated(postUpdates.id, postUpdates.title, postUpdates.author);
+
+		return (postUpdates.id, postUpdates.title);
 	}
 
 	function _deletePost(uint256 postId) internal returns (uint256, string memory) {
@@ -132,7 +129,11 @@ contract Channel {
 		require(post.id > 0, 'post does not exist');
 		require(!post.deleted, 'post already deleted');
 
+		// Set post in postsById mapping as deleted
 		post.deleted = true;
+
+		// Update the post in the posts array
+		posts[postId - 1] = post;
 
 		emit PostDeleted(post.id, post.title, post.author);
 

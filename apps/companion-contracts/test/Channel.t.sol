@@ -55,9 +55,6 @@ contract ChannelTest is BaseTest {
 		assertEq(newPostsLength, currentPostsLength + 1, 'posts counter should be incremented');
 
 		Channel.Post memory post = defaultChannel.getPostById(postId);
-		Channel.Post memory postByTitle = defaultChannel.getPostByTitle(post.title);
-
-		assertEq(post.id, postByTitle.id, 'posts should be the same');
 
 		assertEq(postId, post.id, 'id incorrect');
 		assertEq(post.author, userA, 'author incorrect');
@@ -95,6 +92,20 @@ contract ChannelTest is BaseTest {
 
 		hevm.prank(userA);
 		defaultChannel.updatePost(updatedPost);
+
+		// Assert that the postById and posts of index id - 1 are equal
+		Channel.Post memory postById = defaultChannel.getPostById(postId);
+		Channel.Post memory postByIndex = defaultChannel.getPostByIndex(postId - 1);
+
+		assertEq(postById.id, postByIndex.id, 'id incorrect');
+		assertEq(postById.author, postByIndex.author, 'author incorrect');
+		assertEq(postById.authorName, postByIndex.authorName, 'author name incorrect');
+		assertEq(postById.title, postByIndex.title, 'title incorrect');
+		assertEq(postById.link, postByIndex.link, 'link incorrect');
+		assertEq(postById.description, postByIndex.description, 'description incorrect');
+		assertEq(postById.content, postByIndex.content, 'content incorrect');
+		assertFalse(postById.deleted, 'postById should not be deleted');
+		assertFalse(postByIndex.deleted, 'postByIndex should not be deleted');
 	}
 
 	function testUpdatePostErrors() external {
@@ -146,8 +157,10 @@ contract ChannelTest is BaseTest {
 		defaultChannel.deletePost(postId);
 
 		Channel.Post memory deletedPost = defaultChannel.getPostById(postId);
+		Channel.Post memory deletedPostByIndex = defaultChannel.getPostByIndex(postId - 1);
 
-		assertEq(deletedPost.deleted, true, 'post should be deleted');
+		assertEq(deletedPost.deleted, true, 'post in postId mapping should be deleted');
+		assertEq(deletedPostByIndex.deleted, true, 'post in posts array should be deleted');
 	}
 
 	function testDeletePostErrors() external {

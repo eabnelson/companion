@@ -47,18 +47,9 @@ export class AppController {
 
 			const [owner, title, symbol, description] = channelDetails[0];
 
-			// Create a structured Channel object
-			const channelData = {
-				owner,
-				title,
-				symbol,
-				description
-			};
-
 			const posts = channelDetails[1]
 				.map((item) => {
-					const [id, author, authorName, title, link, description, content, deleted] =
-						item;
+					const [, author, authorName, title, link, description, content, deleted] = item;
 					return (
 						!deleted && {
 							title: title,
@@ -170,7 +161,7 @@ export class AppController {
 				link,
 				description,
 				content,
-				false
+				false // deleted is set by the contract
 			];
 
 			const privateKey = api.pk;
@@ -185,7 +176,63 @@ export class AppController {
 			if (txReceipt && txReceipt.status == 1) {
 				return res.status(201).json({
 					message: 'Post created successfully',
-					txHash: txReceipt.transactionHash
+					txHash: txReceipt.hash
+				});
+			} else {
+				return res.status(500).json({ message: 'Create post transaction failed' });
+			}
+		} catch (error) {
+			return res.status(500).json({ message: 'Failed to create post', error: error.message });
+		}
+	}
+
+	// Update a post for a channel
+	@Post('channel/:channelAddress/:postId')
+	async updatePost(
+		@Param('channelAddress') channelAddress: string,
+		@Param('postId') postId: string,
+		@Body()
+		postData: {
+			authorName: string;
+			title: string;
+			link: string;
+			description: string;
+			content: string;
+		},
+		@Res() res: Response
+	) {
+		try {
+			const channel = new ethers.Contract(channelAddress, Channel.abi, this.provider);
+			const { authorName, title, link, description, content } = postData;
+
+			// Get post to update
+			const post = await channel.getPostById(postId);
+
+			// Any fields that are not updated will be set to the existing value
+			const updatedPost = [
+				post.id, // id
+				post.author, // author
+				authorName ?? post.authorName,
+				title ?? post.title,
+				link ?? post.link,
+				description ?? post.description,
+				content ?? post.content,
+				post.deleted // deleted
+			];
+
+			const privateKey = api.pk;
+
+			const wallet = new ethers.Wallet(privateKey, this.provider);
+
+			const channelWithSigner = channel.connect(wallet) as any;
+
+			const txResponse = await channelWithSigner.updatePost(updatedPost);
+			const txReceipt = await txResponse.wait();
+
+			if (txReceipt && txReceipt.status == 1) {
+				return res.status(201).json({
+					message: 'Post updated successfully',
+					txHash: txReceipt.hash
 				});
 			} else {
 				return res.status(500).json({ message: 'Create post transaction failed' });
