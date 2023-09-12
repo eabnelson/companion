@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 
-const CreateChannel = () => {
+const CreatePost = () => {
 	const [title, setTitle] = useState('');
 	const [link, setLink] = useState('');
+	const [symbol, setSymbol] = useState('');
 	const [description, setDescription] = useState('');
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -13,6 +14,7 @@ const CreateChannel = () => {
 		console.log({
 			title,
 			link,
+			symbol,
 			description
 		});
 
@@ -22,7 +24,7 @@ const CreateChannel = () => {
 	return (
 		<div className="bg-primary flex h-screen items-center justify-center">
 			<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
-				<h1 className="text-primaryText mb-4 text-2xl font-bold">Create Channel</h1>
+				<h1 className="text-primaryText mb-4 text-2xl font-bold">Create Post</h1>
 
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
@@ -44,16 +46,16 @@ const CreateChannel = () => {
 					<div className="mb-4">
 						<label
 							className="text-primaryText mb-2 block text-sm font-medium"
-							htmlFor="link"
+							htmlFor="symbol"
 						>
-							Link
+							Symbol
 						</label>
 						<input
 							id="link"
 							type="url"
 							className="bg-primary text-primaryText w-full rounded border p-2"
-							value={link}
-							onChange={(e) => setLink(e.target.value)}
+							value={symbol}
+							onChange={(e) => setSymbol(e.target.value)}
 						/>
 					</div>
 
@@ -85,4 +87,4 @@ const CreateChannel = () => {
 	);
 };
 
-export default CreateChannel;
+export default CreatePost;

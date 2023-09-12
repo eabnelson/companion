@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					</div>
 					<div className="ml-auto flex gap-10">
 						<Link
-							href="/rss"
+							href="/channel/list"
 							className="hover:text-primaryText text-primary text-lg font-bold uppercase"
 						>
 							view channels

@@ -26,7 +26,7 @@ export class AppController {
 
 	// Get list of all channels from the ChannelFactory
 	@Get('channels')
-	async getEpisodeContent(@Req() request: Request, @Res() res: Response) {
+	async getChannels(@Req() request: Request, @Res() res: Response) {
 		try {
 			const channels = await this.channelFactory.getChannels();
 			return res.json({ channels });
@@ -239,6 +239,53 @@ export class AppController {
 			}
 		} catch (error) {
 			return res.status(500).json({ message: 'Failed to create post', error: error.message });
+		}
+	}
+
+	// Create a new channel
+	@Post('create-channel')
+	async createChannel(
+		@Body()
+		channelData: {
+			title: string;
+			symbol: string;
+			description: string;
+		},
+		@Res() res: Response
+	) {
+		try {
+			const channelDetails = [
+				'0x0000000000000000000000000000000000000000', // owner is set by the contract
+				channelData.title,
+				channelData.symbol,
+				channelData.description
+			];
+
+			const privateKey = api.pk;
+
+			const wallet = new ethers.Wallet(privateKey, this.provider);
+
+			const channelFactoryWithSigner = this.channelFactory.connect(wallet) as any;
+
+			const txResponse = await channelFactoryWithSigner.createChannel(channelDetails);
+			const txReceipt = await txResponse.wait();
+
+			// get address of new channel
+			const channelAddress = txResponse;
+
+			if (txReceipt && txReceipt.status == 1) {
+				return res.status(201).json({
+					message: 'Channel created successfully',
+					channelAddress: channelAddress,
+					txHash: txReceipt.hash
+				});
+			} else {
+				return res.status(500).json({ message: 'Create channel transaction failed' });
+			}
+		} catch (error) {
+			return res
+				.status(500)
+				.json({ message: 'Failed to create channel', error: error.message });
 		}
 	}
 }
