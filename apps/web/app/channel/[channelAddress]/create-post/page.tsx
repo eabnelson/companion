@@ -1,0 +1,118 @@
+'use client';
+
+import { useState } from 'react';
+
+const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
+	const channelAddress = params.channelAddress;
+
+	const [author, setAuthor] = useState('');
+	const [title, setTitle] = useState('');
+	const [link, setLink] = useState('');
+	const [description, setDescription] = useState('');
+	const [content, setContent] = useState('');
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		// Handle writing to contract
+	};
+
+	return (
+		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 sm:px-0">
+			<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
+				<h1 className="text-primaryText mb-4 text-2xl font-bold">Create Post</h1>
+
+				<form onSubmit={handleSubmit}>
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="author"
+						>
+							Author
+						</label>
+						<input
+							id="author"
+							type="text"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={author}
+							onChange={(e) => setAuthor(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="title"
+						>
+							Title
+						</label>
+						<input
+							id="title"
+							type="text"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="link"
+						>
+							Link
+						</label>
+						<input
+							id="link"
+							type="url"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={link}
+							onChange={(e) => setLink(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="description"
+						>
+							Description
+						</label>
+						<textarea
+							id="description"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							rows={4}
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="content"
+						>
+							Content
+						</label>
+						<textarea
+							id="content"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							rows={4}
+							value={content}
+							onChange={(e) => setContent(e.target.value)}
+						/>
+					</div>
+
+					<button
+						type="submit"
+						className="bg-primaryText text-secondary hover:bg-dim-gray w-full rounded p-2"
+					>
+						Create Post
+					</button>
+				</form>
+			</div>
+		</div>
+	);
+};
+
+export default CreatePost;

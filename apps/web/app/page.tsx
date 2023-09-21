@@ -1,9 +1,9 @@
-import CreatePost from './channel/page';
+import CreateChannel from './channel/create/page';
 
 export default function Page() {
 	return (
 		<div>
-			<CreatePost />
+			<CreateChannel />
 		</div>
 	);
 }
