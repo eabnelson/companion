@@ -19,35 +19,59 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 	}, [channelAddress]);
 
 	if (!channelDetails) {
-		return <div>Loading...</div>;
+		return <div className="flex h-screen items-center justify-center">loading...</div>;
 	}
 
 	const { channel: channelData, posts } = channelDetails;
 
 	return (
-		<div className="flex flex-col items-center">
-			<h1 className="text-primaryText mb-4 text-2xl font-bold">
-				Channel: {(channelData as any).title}
-			</h1>
-			<p>Owner: {(channelData as any).owner}</p>
-			<p>Symbol: {(channelData as any).symbol}</p>
-			<p>Description: {(channelData as any).description}</p>{' '}
-			<h2 className="text-primaryText mb-2 text-lg font-bold">Posts:</h2>
-			<ul className="space-y-2">
-				{(posts as any).map((post: any, index: any) => (
-					<li key={index} className="text-primaryText">
-						<h3>Title: {post.title}</h3>
-						<p>Description: {post.description}</p>
-						<p>Author: {post.author}</p>
-					</li>
-				))}
-			</ul>
-			<button
-				onClick={() => (window.location.href = `/channel/${channelAddress}/create-post`)}
-				className="bg-primaryText text-primary hover:bg-secondary rounded px-2 py-1"
-			>
-				🚀 Create Post 🚀
-			</button>
+		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 sm:px-0">
+			<div className="bg-secondary w-full max-w-md space-y-2 rounded-lg p-6 shadow-md">
+				<h1 className="text-primaryText mb-4 text-center text-2xl font-bold">
+					{(channelData as any).title}
+				</h1>
+				<p className="text-primaryText">
+					<span className="font-bold">Owner: </span>
+					<span className="font-normal">
+						{(channelData as any).owner.substring(0, 4)}...
+						{(channelData as any).owner.slice(-4)}
+					</span>
+				</p>
+				<p className="text-primaryText">
+					<span className="font-bold">Symbol: </span>
+					<span className="font-normal">{(channelData as any).symbol}</span>
+				</p>
+				<p className="text-primaryText">
+					<span className="font-bold">Description: </span>
+					<span className="font-normal">{(channelData as any).description}</span>
+				</p>
+				<h2 className="text-primaryText mb-2 text-center text-2xl font-bold">Posts</h2>
+				<ul className="space-y-2">
+					{(posts as any).map((post: any, index: any) => (
+						<li key={index} className="bg-primary mb-4 rounded-lg p-4 shadow-md">
+							<h3 className="text-primaryText mb-2 text-lg font-bold">
+								<span className="font-bold">{post.title}</span>
+							</h3>
+							<p className="mb-2">
+								<span className="font-bold">Description: </span>
+								<span className="font-normal">{post.description}</span>
+							</p>
+							<p className="mb-2">
+								<span className="font-bold">Author: </span>
+								<span className="font-normal">{post.author}</span>
+							</p>
+						</li>
+					))}
+				</ul>
+				<button
+					onClick={() =>
+						(window.location.href = `/channel/${channelAddress}/create-post`)
+					}
+					className="bg-primaryText text-primary mx-auto mt-8 w-full rounded px-2 py-1 text-center"
+				>
+					🔥 Add Post 🔥
+				</button>
+			</div>
 		</div>
 	);
 };

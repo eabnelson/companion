@@ -21,8 +21,10 @@ const CreateChannel = () => {
 
 	return (
 		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 sm:px-0">
-			<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
-				<h1 className="text-primaryText mb-4 text-2xl font-bold">Create Channel</h1>
+			<div className="bg-secondary w-full max-w-md space-y-2 rounded-lg p-6 shadow-md">
+				<h1 className="text-primaryText mb-4 text-center text-2xl font-bold">
+					Create New Channel
+				</h1>
 
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
@@ -77,7 +79,7 @@ const CreateChannel = () => {
 						type="submit"
 						className="bg-primaryText text-secondary hover:bg-dim-gray w-full rounded p-2"
 					>
-						Create Channel
+						🚀 Create Channel 🚀
 					</button>
 				</form>
 			</div>
