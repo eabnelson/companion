@@ -28,22 +28,12 @@ const ChannelList = () => {
 				<div key={index} className="mb-4 flex flex-col items-center">
 					<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
 						<button
-							onClick={() =>
-								(window.location.href = `${env.basescan.url}/address/${channel}`)
-							}
+							onClick={() => (window.location.href = `/channel/${channel}/details`)}
 							className="bg-primaryText text-primary hover:bg-secondary mb-4 rounded px-2 py-1"
 						>
-							View Contract ↗️
+							👀 View Channel 👀
 						</button>
 						<div className="flex space-x-2">
-							<button
-								onClick={() =>
-									(window.location.href = `/channel/${channel}/details`)
-								}
-								className="bg-primaryText text-primary hover:bg-secondary rounded px-2 py-1"
-							>
-								👀 View Channel 👀
-							</button>
 							<button
 								onClick={() =>
 									copyToClipboard(
@@ -54,6 +44,14 @@ const ChannelList = () => {
 								className="bg-primaryText text-primary hover:bg-secondary rounded px-2 py-1"
 							>
 								{copiedChannel === channel ? '✅ Copied ✅' : '🔗 Get RSS Feed 🔗'}
+							</button>
+							<button
+								onClick={() =>
+									(window.location.href = `${env.basescan.url}/address/${channel}`)
+								}
+								className="bg-primaryText text-primary hover:bg-secondary rounded px-2 py-1"
+							>
+								View Contract ↗️
 							</button>
 						</div>
 					</div>
