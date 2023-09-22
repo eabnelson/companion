@@ -4,8 +4,8 @@ import { apiEnv } from '../environments/environment';
 import { JsonRpcProvider, ethers } from 'ethers';
 import * as xmlJs from 'xml-js';
 
-const Channel = require('../abi/Channel.json');
-const ChannelFactory = require('../abi/ChannelFactory.json');
+const Channel = require('../../../../abi/Channel.json');
+const ChannelFactory = require('../../../../abi/ChannelFactory.json');
 
 const { api } = apiEnv;
 

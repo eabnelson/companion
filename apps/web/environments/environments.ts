@@ -13,6 +13,11 @@ export const webEnv: IWebEnv = {
 		url: isProd
 			? (process.env.NEXT_PUBLIC_BASESCAN_PROD as string)
 			: (process.env.NEXT_PUBLIC_BASESCAN as string)
+	},
+	chain: {
+		id: isProd
+			? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID_PROD as string)
+			: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID_DEV as string)
 	}
 };
 
@@ -23,5 +28,8 @@ export interface IWebEnv {
 	};
 	basescan: {
 		url: string;
+	};
+	chain: {
+		id: number;
 	};
 }
