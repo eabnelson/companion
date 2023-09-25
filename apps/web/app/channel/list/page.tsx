@@ -24,7 +24,7 @@ const ChannelList = () => {
 
 	return (
 		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 sm:px-0">
-			{channels.map((channel, index) => (
+			{channels.reverse().map((channel, index) => (
 				<div key={index} className="mb-4 flex flex-col items-center">
 					<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
 						<button

@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import { webEnv } from '../../../environments/environments';
 import ChannelFactory from '../../../../../abi/ChannelFactory.json';
+
+const env = webEnv;
 
 const CreateChannel = () => {
 	const { address } = useAccount();
@@ -11,7 +13,6 @@ const CreateChannel = () => {
 	const [title, setTitle] = useState('');
 	const [symbol, setSymbol] = useState('');
 	const [description, setDescription] = useState('');
-	const [shouldWrite, setShouldWrite] = useState(false);
 
 	const newFormData = {
 		owner: address as `0x${string}`,
@@ -20,29 +21,30 @@ const CreateChannel = () => {
 		description: description
 	};
 
-	const { config } = usePrepareContractWrite({
+	const { data, write } = useContractWrite({
 		address: ChannelFactory.address as `0x${string}`,
 		abi: ChannelFactory.abi,
 		functionName: 'createChannel',
-		args: [newFormData],
-		chainId: webEnv.chain.id,
-		onSuccess(data) {
-			console.log('Success', data);
+		chainId: webEnv.chain.id
+	});
+
+	const { isLoading } = useWaitForTransaction({
+		hash: data?.hash,
+		onSettled(data, error) {
+			if (data) {
+				window.location.href = `/channel/list`;
+			} else if (error) {
+				console.log(error);
+			}
 		}
 	});
 
-	const { data, isLoading, isSuccess, write } = useContractWrite(config);
-
-	useEffect(() => {
-		if (shouldWrite && write) {
-			const result = write?.();
-			console.log('result:', result);
-		}
-	}, [shouldWrite]);
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setShouldWrite(true);
+
+		write?.({
+			args: [newFormData]
+		});
 	};
 
 	return (
@@ -103,8 +105,9 @@ const CreateChannel = () => {
 					<button
 						type="submit"
 						className="bg-primaryText text-secondary hover:bg-dim-gray w-full rounded p-2"
+						disabled={!write || isLoading}
 					>
-						🚀 Create Channel 🚀
+						{isLoading ? `🚀 Creating Channel 🚀` : `🔮 Create Channel 🔮`}
 					</button>
 				</form>
 			</div>
