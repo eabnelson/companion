@@ -1,9 +1,14 @@
+'use client';
+
 import CreateChannel from './channel/create/page';
+import MagicRainbow from './rainbow/providers';
 
 export default function Page() {
 	return (
 		<div>
-			<CreateChannel />
+			<MagicRainbow>
+				<CreateChannel />
+			</MagicRainbow>
 		</div>
 	);
 }
