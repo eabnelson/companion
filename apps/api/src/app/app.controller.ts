@@ -149,6 +149,8 @@ export class AppController {
 		}
 	}
 
+	// TODO DELETE POST ENDPOINTS
+
 	// Create a new post for a channel
 	@Post('channel/:channelAddress/create-post')
 	async createPost(

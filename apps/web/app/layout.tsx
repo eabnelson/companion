@@ -1,9 +1,6 @@
 import { ReactNode } from 'react';
 import '../styles/global.css';
 import { Lato } from 'next/font/google';
-import Link from 'next/link';
-import MagicRainbow from './providers';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Navbar from './navigation/navbar';
 import Providers from './providers';
 

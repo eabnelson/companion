@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import { webEnv } from '../../../environments/environments';
 import ChannelFactory from '../../../../../abi/ChannelFactory.json';
 
-const env = webEnv;
-
 const CreateChannel = () => {
+	const router = useRouter();
 	const { address } = useAccount();
 
 	const [title, setTitle] = useState('');
@@ -25,7 +25,7 @@ const CreateChannel = () => {
 		hash: data?.hash,
 		onSettled(data, error) {
 			if (data) {
-				window.location.href = `/channel/list`;
+				router.push('/channel/list');
 			} else if (error) {
 				console.log(error);
 			}

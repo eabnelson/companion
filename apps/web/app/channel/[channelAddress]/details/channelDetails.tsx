@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { webEnv } from '../../../../environments/environments';
 
 const env = webEnv;
 
 const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
+	const router = useRouter();
+
 	const channelAddress = params.channelAddress;
 	const [channelDetails, setChannelDetails] = useState(null);
 
@@ -64,9 +67,7 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 					))}
 				</ul>
 				<button
-					onClick={() =>
-						(window.location.href = `/channel/${channelAddress}/create-post`)
-					}
+					onClick={() => router.push(`/channel/${channelAddress}/create-post`)}
 					className="bg-primaryText text-primary mx-auto mt-8 w-full rounded px-2 py-1 text-center"
 				>
 					🔥 Add Post 🔥
