@@ -49,7 +49,7 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 					<span className="font-normal">{(channelData as any).description}</span>
 				</p>
 				<h2 className="text-primaryText mb-2 text-center text-2xl font-bold">Posts</h2>
-				<ul className="space-y-2">
+				<ul className="space-y-4">
 					{(posts as any).map((post: any, index: any) => (
 						<li key={index} className="bg-primary mb-4 rounded-lg p-4 shadow-md">
 							<h3 className="text-primaryText mb-2 text-lg font-bold">
@@ -65,13 +65,15 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 							</p>
 						</li>
 					))}
+					<li>
+						<button
+							onClick={() => router.push(`/channel/${channelAddress}/create-post`)}
+							className="bg-primary text-primaryText mx-auto w-full rounded px-2 py-1 text-center"
+						>
+							+ new post +
+						</button>
+					</li>
 				</ul>
-				<button
-					onClick={() => router.push(`/channel/${channelAddress}/create-post`)}
-					className="bg-primaryText text-primary mx-auto mt-8 w-full rounded px-2 py-1 text-center"
-				>
-					🔥 Add Post 🔥
-				</button>
 			</div>
 		</div>
 	);

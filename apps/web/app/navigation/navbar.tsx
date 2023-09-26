@@ -14,7 +14,7 @@ export default function Navbar() {
 					href="/channel/create"
 					className="hover:text-primaryText text-primary text-sm font-bold uppercase md:text-lg"
 				>
-					create channels
+					create
 				</Link>
 			</div>
 			<div className="ml-auto flex gap-2 md:gap-10">
@@ -22,7 +22,7 @@ export default function Navbar() {
 					href="/channel/list"
 					className="hover:text-primaryText text-primary text-sm font-bold uppercase md:text-lg"
 				>
-					view channels
+					browse
 				</Link>
 			</div>
 			{address ? (
@@ -31,12 +31,17 @@ export default function Navbar() {
 						href={`/${address}`}
 						className="hover:text-primaryText text-primary text-sm font-bold uppercase md:text-lg"
 					>
-						your channels
+						manage
 					</Link>
 				</div>
 			) : null}
-			<div className="ml-auto flex gap-2 md:gap-10">
-				<ConnectButton />
+			<div className="my-1 ml-auto flex gap-2 md:gap-10">
+				<ConnectButton
+					label="CONNECT"
+					chainStatus="none"
+					accountStatus="avatar"
+					showBalance={false}
+				/>
 			</div>
 		</nav>
 	);

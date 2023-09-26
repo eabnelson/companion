@@ -4,8 +4,8 @@ import React from 'react';
 import {
 	RainbowKitProvider,
 	connectorsForWallets,
-	darkTheme,
-	getDefaultWallets
+	getDefaultWallets,
+	darkTheme
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { optimismGoerli, optimism, base, baseGoerli } from '@wagmi/chains';
@@ -43,7 +43,17 @@ export default function MagicRainbow({ children }: { children: React.ReactNode }
 
 	return (
 		<WagmiConfig config={config}>
-			<RainbowKitProvider theme={darkTheme()} chains={chains}>
+			<RainbowKitProvider
+				theme={darkTheme({
+					accentColor: '#476A6F',
+					accentColorForeground: '#519E8A',
+					borderRadius: 'large',
+					fontStack: 'system',
+					overlayBlur: 'small'
+				})}
+				chains={chains}
+				modalSize="compact"
+			>
 				{mounted && children}
 			</RainbowKitProvider>
 		</WagmiConfig>

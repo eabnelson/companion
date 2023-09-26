@@ -104,7 +104,7 @@ const CreateChannel = () => {
 					</div>
 					<button
 						type="submit"
-						className="bg-primaryText text-secondary hover:bg-dim-gray w-full rounded p-2"
+						className="bg-primary text-primaryText hover:bg-dim-gray w-full rounded p-2"
 						disabled={!write || isLoading}
 					>
 						{isLoading ? `creating channel ...` : `🔮 Create Channel 🔮`}

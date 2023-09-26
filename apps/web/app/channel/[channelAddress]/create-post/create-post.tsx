@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import { webEnv } from '../../../../environments/environments';
 import Channel from '../../../../../../abi/Channel.json';
 
 const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 	const channelAddress = params.channelAddress;
-
+	const router = useRouter();
 	const { address } = useAccount();
 
 	const [author, setAuthor] = useState('');
@@ -27,7 +28,7 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 		hash: data?.hash,
 		onSettled(data, error) {
 			if (data) {
-				window.location.href = `/channel/${channelAddress}/details`;
+				router.push(`/channel/${channelAddress}/details`);
 			} else if (error) {
 				console.log(error);
 			}
@@ -143,7 +144,7 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 
 					<button
 						type="submit"
-						className="bg-primaryText text-secondary hover:bg-dim-gray w-full rounded p-2"
+						className="bg-primary text-primaryText hover:bg-dim-gray w-full rounded p-2"
 						disabled={!write || isLoading}
 					>
 						{isLoading ? `creating post ...` : `🚀 Create Post 🚀`}
