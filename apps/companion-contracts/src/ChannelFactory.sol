@@ -4,10 +4,15 @@ pragma solidity 0.8.19;
 import 'src/Channel.sol';
 
 contract ChannelFactory {
-	address[] public channels;
+	struct ChannelInfo {
+		address channelAddress;
+		string title;
+		address owner;
+	}
 
-	mapping(string => address) channelByTitle; // title => Channel
-	mapping(address => address[]) channelsByOwner; // owner => Channels
+	ChannelInfo[] public channels;
+
+	mapping(address => ChannelInfo[]) public channelsByOwner;
 
 	event ChannelCreated(address indexed channelAddress, string title, address indexed owner);
 
@@ -18,29 +23,25 @@ contract ChannelFactory {
 
 		Channel newChannel = new Channel(channel);
 
-		channels.push(address(newChannel));
-		channelByTitle[channel.title] = address(newChannel);
-		channelsByOwner[channel.owner].push(address(newChannel));
+		channels.push(ChannelInfo(address(newChannel), channel.title, channel.owner));
+		channelsByOwner[channel.owner].push(
+			ChannelInfo(address(newChannel), channel.title, channel.owner)
+		);
 
 		emit ChannelCreated(address(newChannel), channel.title, channel.owner);
 
 		return address(newChannel);
 	}
 
-	function getChannels() external view returns (address[] memory) {
+	function getChannels() external view returns (ChannelInfo[] memory) {
 		return channels;
 	}
 
-	function getChannelByTitle(string memory title) external view returns (address) {
-		return channelByTitle[title];
-	}
-
-	function getChannelsByOwner(address owner) external view returns (address[] memory) {
+	function getChannelsByOwner(address owner) external view returns (ChannelInfo[] memory) {
 		return channelsByOwner[owner];
 	}
 
-	function _checkChannel(Channel.ChannelParams memory channel) private view {
-		require(channelByTitle[channel.title] == address(0), 'channel title already exists');
+	function _checkChannel(Channel.ChannelParams memory channel) private pure {
 		require(bytes(channel.title).length > 0, 'channel title is required');
 		require(bytes(channel.symbol).length > 0, 'channel symbol is required');
 		require(bytes(channel.description).length > 0, 'channel description is required');
