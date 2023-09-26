@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { webEnv } from '../../../environments/environments';
+import { webEnv } from '../../environments/environments';
 
 const env = webEnv;
 
-const ChannelList = () => {
+const UserChannels = ({ params }: { params: { userAddress: string } }) => {
+	const userAddress = params.userAddress;
+
 	const [channels, setChannels] = useState([]);
 	const [copiedChannel, setCopiedChannel] = useState('');
 
 	useEffect(() => {
-		fetch(`${env.api.apiUrl}/channels`)
+		fetch(`${env.api.apiUrl}/channels/${userAddress}`)
 			.then((response) => response.json())
 			.then((data) => setChannels(data.channels))
 			.catch((error) => console.error('Error:', error));
@@ -61,4 +63,4 @@ const ChannelList = () => {
 	);
 };
 
-export default ChannelList;
+export default UserChannels;

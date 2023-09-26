@@ -11,7 +11,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { optimismGoerli, optimism, base, baseGoerli } from '@wagmi/chains';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { rainbowMagicConnector } from '../../lib/RainbowMagicConnector';
+import { rainbowMagicConnector } from '../lib/RainbowMagicConnector';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[optimism, optimismGoerli, base, baseGoerli],

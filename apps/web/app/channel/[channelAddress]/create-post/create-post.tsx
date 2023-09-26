@@ -54,7 +54,7 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 	};
 
 	return (
-		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 sm:px-0">
+		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 pt-20 sm:px-0">
 			<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
 				<h1 className="text-primaryText mb-4 text-center text-2xl font-bold">
 					Create Post

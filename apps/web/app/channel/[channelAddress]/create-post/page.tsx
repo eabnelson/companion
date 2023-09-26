@@ -1,10 +1,5 @@
-import MagicRainbow from '../../../rainbow/providers';
 import CreatePost from './create-post';
 
 export default function App({ params }: { params: { channelAddress: string } }) {
-	return (
-		<MagicRainbow>
-			<CreatePost params={params} />
-		</MagicRainbow>
-	);
+	return <CreatePost params={params} />;
 }
