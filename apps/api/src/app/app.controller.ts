@@ -37,6 +37,20 @@ export class AppController {
 		}
 	}
 
+	// Get list of all channels for a user
+	@Get('channels/:userAddress')
+	async getUserChannels(@Req() request: Request, @Res() res: Response) {
+		try {
+			const userAddress = request.params.userAddress;
+			const channels = await this.channelFactory.getChannelsByOwner(userAddress);
+			return res.json({ channels });
+		} catch (error) {
+			return res
+				.status(500)
+				.json({ message: 'Failed to get channels for user', error: error.message });
+		}
+	}
+
 	// Get RSS feed for a channel
 	@Get('channelFeed/:channelAddress')
 	async getChannelFeed(@Param('channelAddress') channelAddress: string, @Res() res: Response) {
