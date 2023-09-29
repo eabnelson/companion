@@ -8,30 +8,15 @@ contract ChannelFactory {
 		address channelAddress;
 		string title;
 		address owner;
+		bool deleted;
 	}
 
 	ChannelInfo[] public channels;
-
+	mapping(address => uint256) public channelIndexByAddress;
 	mapping(address => ChannelInfo[]) public channelsByOwner;
 
-	event ChannelCreated(address indexed channelAddress, string title, address indexed owner);
-
-	function createChannel(Channel.ChannelParams memory channel) external returns (address) {
-		_checkChannel(channel);
-
-		channel.owner = msg.sender;
-
-		Channel newChannel = new Channel(channel);
-
-		channels.push(ChannelInfo(address(newChannel), channel.title, channel.owner));
-		channelsByOwner[channel.owner].push(
-			ChannelInfo(address(newChannel), channel.title, channel.owner)
-		);
-
-		emit ChannelCreated(address(newChannel), channel.title, channel.owner);
-
-		return address(newChannel);
-	}
+	event ChannelCreated(address indexed channelAddress, address indexed owner);
+	event ChannelUpdated(address indexed channelAddress, address indexed owner);
 
 	function getChannels() external view returns (ChannelInfo[] memory) {
 		return channels;
@@ -41,9 +26,50 @@ contract ChannelFactory {
 		return channelsByOwner[owner];
 	}
 
-	function _checkChannel(Channel.ChannelParams memory channel) private pure {
-		require(bytes(channel.title).length > 0, 'channel title is required');
-		require(bytes(channel.symbol).length > 0, 'channel symbol is required');
-		require(bytes(channel.description).length > 0, 'channel description is required');
+	function getChannelInfo(address channelAddress) external view returns (ChannelInfo memory) {
+		return channels[channelIndexByAddress[channelAddress]];
+	}
+
+	function createChannel(Channel.ChannelParams memory channel) external returns (address) {
+		channel.owner = msg.sender;
+
+		Channel newChannel = new Channel(channel, address(this));
+
+		// Map the channel address to the index in the channels array
+		channelIndexByAddress[address(newChannel)] = channels.length;
+
+		// Add the new channel to the channels array
+		channels.push(ChannelInfo(address(newChannel), channel.title, channel.owner, false));
+
+		// Map the channel owner to a list of channels they own
+		channelsByOwner[channel.owner].push(
+			ChannelInfo(address(newChannel), channel.title, channel.owner, false)
+		);
+
+		emit ChannelCreated(address(newChannel), channel.owner);
+
+		return address(newChannel);
+	}
+
+	// Called by a channel to keep the factory up to date
+	function updateChannel(ChannelInfo memory channelInfo) external {
+		require(msg.sender == channelInfo.channelAddress, 'can only be updated by a channel');
+
+		uint256 channelIndex = channelIndexByAddress[channelInfo.channelAddress];
+
+		// Update the channel in the channels array
+		channels[channelIndex] = channelInfo;
+
+		address owner = channels[channelIndex].owner;
+
+		// Update the channel in the channelsByOwner mapping
+		for (uint256 i = 0; i < channelsByOwner[owner].length; i++) {
+			if (channelsByOwner[owner][i].channelAddress == channelInfo.channelAddress) {
+				channelsByOwner[owner][i] = channelInfo;
+				break;
+			}
+		}
+
+		emit ChannelUpdated(channelInfo.channelAddress, channelInfo.owner);
 	}
 }

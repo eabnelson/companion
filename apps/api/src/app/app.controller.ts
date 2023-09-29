@@ -14,6 +14,13 @@ export class AppController {
 	private provider: ethers.JsonRpcProvider;
 	private channelFactory: ethers.Contract;
 
+	readonly defaultRssAttributes = {
+		'xmlns:atom': 'http://www.w3.org/2005/Atom',
+		'xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+		'xmlns:media': 'http://search.yahoo.com/mrss/',
+		version: '2.0'
+	};
+
 	constructor() {
 		this.provider = new JsonRpcProvider(api.rpc);
 
@@ -79,11 +86,7 @@ export class AppController {
 
 			const xmlObj = {
 				rss: {
-					_attributes: {
-						'xmlns:atom': 'http://www.w3.org/2005/Atom',
-						'xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
-						version: '2.0'
-					},
+					_attributes: this.defaultRssAttributes,
 					channel: {
 						ownerAddress: owner,
 						title: title,

@@ -8,7 +8,7 @@
 		"start:web": "nx serve web",
 		"cd:api": "npx nx build api --prod",
 		"cd:web": "npx nx build web --prod",
-		"run:make_test": "cd apps/companion-contracts && make test_all"
+		"make_test": "cd apps/companion-contracts && make test_all"
 	},
 	"private": true,
 	"dependencies": {

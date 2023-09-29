@@ -15,21 +15,27 @@ contract ChannelFactoryTest is BaseTest {
 
 	function testCreateChannel() external {
 		string memory title = 'New Channel';
-		string memory symbol;
+		string memory link = 'https://example.com';
+		string memory language = '';
 		string memory description = 'New Channel Description';
+		string memory copyright = '';
+		string memory imageUrl = 'https://example.com/image.png';
 
 		Channel.ChannelParams memory newChannelParams = setChannelParams(
 			title,
-			symbol,
-			description
+			link,
+			language,
+			description,
+			copyright,
+			imageUrl
 		);
 
 		// Attempt to create channel without symbol
 		hevm.prank(userA);
-		hevm.expectRevert(abi.encodePacked('channel symbol is required'));
+		hevm.expectRevert(abi.encodePacked('language is required'));
 		channelFactory.createChannel(newChannelParams);
 
-		newChannelParams.symbol = 'NCS';
+		newChannelParams.language = 'en';
 
 		ChannelFactory.ChannelInfo[] memory currentChannels = channelFactory.getChannels();
 		uint256 currentChannelsLength = currentChannels.length;
