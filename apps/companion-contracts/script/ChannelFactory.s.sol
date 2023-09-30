@@ -22,7 +22,7 @@ contract ChannelFactoryScript is Script {
 
 	// Post params
 	string guid = '31144c21-6dd0-4d4f-9bde-2f940b29ebfc';
-	string postTitle = 'The First Post';
+	string postTitle = '#314 Paul Graham (How To Do Great Work)';
 	string pubDate = 'Mon, 31 Jul 2023 04:03:04 +0000';
 	string authorName = 'David Senra';
 	string postDescription =

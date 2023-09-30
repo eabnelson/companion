@@ -11,9 +11,8 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 	const router = useRouter();
 	const { address } = useAccount();
 
-	const [author, setAuthor] = useState('');
 	const [title, setTitle] = useState('');
-	const [link, setLink] = useState('');
+	const [author, setAuthor] = useState('');
 	const [description, setDescription] = useState('');
 	const [content, setContent] = useState('');
 
@@ -43,9 +42,10 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 				{
 					id: 0,
 					author: address,
-					authorName: author,
+					guid: generateGUID(),
 					title: title,
-					link: link,
+					pubDate: new Date().toUTCString().replace('GMT', '+0000'),
+					authorName: author,
 					description: description,
 					content: content,
 					deleted: false
@@ -58,26 +58,10 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 pt-20 sm:px-0">
 			<div className="bg-secondary w-full max-w-md rounded-lg p-6 shadow-md">
 				<h1 className="text-primaryText mb-4 text-center text-2xl font-bold">
-					Create Post
+					New Episode
 				</h1>
 
 				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
-						<label
-							className="text-primaryText mb-2 block text-sm font-medium"
-							htmlFor="author"
-						>
-							Author
-						</label>
-						<input
-							id="author"
-							type="text"
-							className="bg-primary text-primaryText w-full rounded border p-2"
-							value={author}
-							onChange={(e) => setAuthor(e.target.value)}
-						/>
-					</div>
-
 					<div className="mb-4">
 						<label
 							className="text-primaryText mb-2 block text-sm font-medium"
@@ -97,16 +81,16 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 					<div className="mb-4">
 						<label
 							className="text-primaryText mb-2 block text-sm font-medium"
-							htmlFor="link"
+							htmlFor="author"
 						>
-							Link
+							Author
 						</label>
 						<input
-							id="link"
-							type="url"
+							id="author"
+							type="text"
 							className="bg-primary text-primaryText w-full rounded border p-2"
-							value={link}
-							onChange={(e) => setLink(e.target.value)}
+							value={author}
+							onChange={(e) => setAuthor(e.target.value)}
 						/>
 					</div>
 
@@ -131,12 +115,12 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 							className="text-primaryText mb-2 block text-sm font-medium"
 							htmlFor="content"
 						>
-							Content
+							Recording
 						</label>
 						<textarea
 							id="content"
 							className="bg-primary text-primaryText w-full rounded border p-2"
-							rows={4}
+							rows={2}
 							value={content}
 							onChange={(e) => setContent(e.target.value)}
 						/>
@@ -147,12 +131,20 @@ const CreatePost = ({ params }: { params: { channelAddress: string } }) => {
 						className="bg-primary text-primaryText hover:bg-dim-gray w-full rounded p-2"
 						disabled={!write || isLoading}
 					>
-						{isLoading ? `creating post ...` : `🚀 Create Post 🚀`}
+						{isLoading ? `publishing ...` : `🚀 Publish 🚀`}
 					</button>
 				</form>
 			</div>
 		</div>
 	);
 };
+
+function generateGUID() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = (Math.random() * 16) | 0,
+			v = c === 'x' ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+}
 
 export default CreatePost;

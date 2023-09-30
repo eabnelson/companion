@@ -6,16 +6,29 @@
 					"components": [
 						{ "internalType": "address", "name": "owner", "type": "address" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "symbol", "type": "string" },
-						{ "internalType": "string", "name": "description", "type": "string" }
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "language", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "copyright", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
 					],
 					"internalType": "struct Channel.ChannelParams",
-					"name": "channel",
+					"name": "channelParams",
 					"type": "tuple"
-				}
+				},
+				{ "internalType": "address", "name": "channelFactory", "type": "address" }
 			],
 			"stateMutability": "nonpayable",
 			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+			],
+			"name": "ChannelUpdated",
+			"type": "event"
 		},
 		{
 			"anonymous": false,
@@ -61,14 +74,31 @@
 			"type": "event"
 		},
 		{
+			"inputs": [],
+			"name": "channel",
+			"outputs": [
+				{ "internalType": "address", "name": "owner", "type": "address" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "link", "type": "string" },
+				{ "internalType": "string", "name": "language", "type": "string" },
+				{ "internalType": "string", "name": "description", "type": "string" },
+				{ "internalType": "string", "name": "copyright", "type": "string" },
+				{ "internalType": "string", "name": "imageUrl", "type": "string" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [
 				{
 					"components": [
 						{ "internalType": "uint256", "name": "id", "type": "uint256" },
 						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -98,8 +128,10 @@
 		},
 		{
 			"inputs": [],
-			"name": "description",
-			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+			"name": "factory",
+			"outputs": [
+				{ "internalType": "contract ChannelFactory", "name": "", "type": "address" }
+			],
 			"stateMutability": "view",
 			"type": "function"
 		},
@@ -111,9 +143,10 @@
 					"components": [
 						{ "internalType": "uint256", "name": "id", "type": "uint256" },
 						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -134,9 +167,10 @@
 					"components": [
 						{ "internalType": "uint256", "name": "id", "type": "uint256" },
 						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -150,16 +184,17 @@
 			"type": "function"
 		},
 		{
-			"inputs": [{ "internalType": "string", "name": "postTitle", "type": "string" }],
-			"name": "getPostByTitle",
+			"inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }],
+			"name": "getPostByIndex",
 			"outputs": [
 				{
 					"components": [
 						{ "internalType": "uint256", "name": "id", "type": "uint256" },
 						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -169,13 +204,6 @@
 					"type": "tuple"
 				}
 			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "owner",
-			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 			"stateMutability": "view",
 			"type": "function"
 		},
@@ -185,9 +213,10 @@
 			"outputs": [
 				{ "internalType": "uint256", "name": "id", "type": "uint256" },
 				{ "internalType": "address", "name": "author", "type": "address" },
-				{ "internalType": "string", "name": "authorName", "type": "string" },
+				{ "internalType": "string", "name": "guid", "type": "string" },
 				{ "internalType": "string", "name": "title", "type": "string" },
-				{ "internalType": "string", "name": "link", "type": "string" },
+				{ "internalType": "string", "name": "pubDate", "type": "string" },
+				{ "internalType": "string", "name": "authorName", "type": "string" },
 				{ "internalType": "string", "name": "description", "type": "string" },
 				{ "internalType": "string", "name": "content", "type": "string" },
 				{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -201,25 +230,10 @@
 			"outputs": [
 				{ "internalType": "uint256", "name": "id", "type": "uint256" },
 				{ "internalType": "address", "name": "author", "type": "address" },
-				{ "internalType": "string", "name": "authorName", "type": "string" },
+				{ "internalType": "string", "name": "guid", "type": "string" },
 				{ "internalType": "string", "name": "title", "type": "string" },
-				{ "internalType": "string", "name": "link", "type": "string" },
-				{ "internalType": "string", "name": "description", "type": "string" },
-				{ "internalType": "string", "name": "content", "type": "string" },
-				{ "internalType": "bool", "name": "deleted", "type": "bool" }
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [{ "internalType": "string", "name": "", "type": "string" }],
-			"name": "postsByTitle",
-			"outputs": [
-				{ "internalType": "uint256", "name": "id", "type": "uint256" },
-				{ "internalType": "address", "name": "author", "type": "address" },
+				{ "internalType": "string", "name": "pubDate", "type": "string" },
 				{ "internalType": "string", "name": "authorName", "type": "string" },
-				{ "internalType": "string", "name": "title", "type": "string" },
-				{ "internalType": "string", "name": "link", "type": "string" },
 				{ "internalType": "string", "name": "description", "type": "string" },
 				{ "internalType": "string", "name": "content", "type": "string" },
 				{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -235,8 +249,12 @@
 					"components": [
 						{ "internalType": "address", "name": "owner", "type": "address" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "symbol", "type": "string" },
-						{ "internalType": "string", "name": "description", "type": "string" }
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "language", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "copyright", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
 					],
 					"internalType": "struct Channel.ChannelParams",
 					"name": "",
@@ -246,9 +264,10 @@
 					"components": [
 						{ "internalType": "uint256", "name": "id", "type": "uint256" },
 						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }
@@ -258,20 +277,6 @@
 					"type": "tuple[]"
 				}
 			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "symbol",
-			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "title",
-			"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
 			"stateMutability": "view",
 			"type": "function"
 		},
@@ -286,11 +291,35 @@
 			"inputs": [
 				{
 					"components": [
-						{ "internalType": "uint256", "name": "id", "type": "uint256" },
-						{ "internalType": "address", "name": "author", "type": "address" },
-						{ "internalType": "string", "name": "authorName", "type": "string" },
+						{ "internalType": "address", "name": "owner", "type": "address" },
 						{ "internalType": "string", "name": "title", "type": "string" },
 						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "language", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "copyright", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct Channel.ChannelParams",
+					"name": "channelParams",
+					"type": "tuple"
+				}
+			],
+			"name": "updateChannel",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "uint256", "name": "id", "type": "uint256" },
+						{ "internalType": "address", "name": "author", "type": "address" },
+						{ "internalType": "string", "name": "guid", "type": "string" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "pubDate", "type": "string" },
+						{ "internalType": "string", "name": "authorName", "type": "string" },
 						{ "internalType": "string", "name": "description", "type": "string" },
 						{ "internalType": "string", "name": "content", "type": "string" },
 						{ "internalType": "bool", "name": "deleted", "type": "bool" }

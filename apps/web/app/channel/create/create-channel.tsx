@@ -11,8 +11,11 @@ const CreateChannel = () => {
 	const { address } = useAccount();
 
 	const [title, setTitle] = useState('');
-	const [symbol, setSymbol] = useState('');
+	const [link, setLink] = useState('');
+	const [language, setLanguage] = useState('');
 	const [description, setDescription] = useState('');
+	const [copyright, setCopyright] = useState('');
+	const [imageUrl, setImageUrl] = useState('');
 
 	const { data, write } = useContractWrite({
 		address: ChannelFactory.address as `0x${string}`,
@@ -40,8 +43,12 @@ const CreateChannel = () => {
 				{
 					owner: address as `0x${string}`,
 					title: title,
-					symbol: symbol,
-					description: description
+					link: link,
+					language: language,
+					description: description,
+					copyright: copyright,
+					imageUrl: imageUrl,
+					deleted: false
 				}
 			]
 		});
@@ -74,16 +81,32 @@ const CreateChannel = () => {
 					<div className="mb-4">
 						<label
 							className="text-primaryText mb-2 block text-sm font-medium"
-							htmlFor="symbol"
+							htmlFor="link"
 						>
-							Symbol
+							Link
 						</label>
 						<input
-							id="symbol"
+							id="link"
 							type="text"
 							className="bg-primary text-primaryText w-full rounded border p-2"
-							value={symbol}
-							onChange={(e) => setSymbol(e.target.value)}
+							value={link}
+							onChange={(e) => setLink(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="language"
+						>
+							Language
+						</label>
+						<input
+							id="language"
+							type="text"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={language}
+							onChange={(e) => setLanguage(e.target.value)}
 						/>
 					</div>
 
@@ -102,6 +125,39 @@ const CreateChannel = () => {
 							onChange={(e) => setDescription(e.target.value)}
 						/>
 					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="copyright"
+						>
+							Copyright
+						</label>
+						<input
+							id="copyright"
+							type="text"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={copyright}
+							onChange={(e) => setCopyright(e.target.value)}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label
+							className="text-primaryText mb-2 block text-sm font-medium"
+							htmlFor="imageUrl"
+						>
+							Image URL
+						</label>
+						<input
+							id="imageUrl"
+							type="text"
+							className="bg-primary text-primaryText w-full rounded border p-2"
+							value={imageUrl}
+							onChange={(e) => setImageUrl(e.target.value)}
+						/>
+					</div>
+
 					<button
 						type="submit"
 						className="bg-primary text-primaryText hover:bg-dim-gray w-full rounded p-2"

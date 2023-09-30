@@ -7,6 +7,7 @@ contract ChannelFactory {
 	struct ChannelInfo {
 		address channelAddress;
 		string title;
+		string imageUrl;
 		address owner;
 		bool deleted;
 	}
@@ -39,11 +40,13 @@ contract ChannelFactory {
 		channelIndexByAddress[address(newChannel)] = channels.length;
 
 		// Add the new channel to the channels array
-		channels.push(ChannelInfo(address(newChannel), channel.title, channel.owner, false));
+		channels.push(
+			ChannelInfo(address(newChannel), channel.title, channel.imageUrl, channel.owner, false)
+		);
 
 		// Map the channel owner to a list of channels they own
 		channelsByOwner[channel.owner].push(
-			ChannelInfo(address(newChannel), channel.title, channel.owner, false)
+			ChannelInfo(address(newChannel), channel.title, channel.imageUrl, channel.owner, false)
 		);
 
 		emit ChannelCreated(address(newChannel), channel.owner);

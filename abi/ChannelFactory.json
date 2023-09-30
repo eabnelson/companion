@@ -1,5 +1,5 @@
 {
-	"address": "0xEB37BBaF291cF7C7a8F3796a18b6355107208838",
+	"address": "0x1936104A6d370Ca389B867f4F730ae60d538f647",
 	"abi": [
 		{
 			"anonymous": false,
@@ -10,16 +10,58 @@
 					"name": "channelAddress",
 					"type": "address"
 				},
-				{ "indexed": false, "internalType": "string", "name": "title", "type": "string" },
 				{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
 			],
 			"name": "ChannelCreated",
 			"type": "event"
 		},
 		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "channelAddress",
+					"type": "address"
+				},
+				{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+			],
+			"name": "ChannelUpdated",
+			"type": "event"
+		},
+		{
+			"inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"name": "channelIndexByAddress",
+			"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 			"name": "channels",
-			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"outputs": [
+				{ "internalType": "address", "name": "channelAddress", "type": "address" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "imageUrl", "type": "string" },
+				{ "internalType": "address", "name": "owner", "type": "address" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{ "internalType": "address", "name": "", "type": "address" },
+				{ "internalType": "uint256", "name": "", "type": "uint256" }
+			],
+			"name": "channelsByOwner",
+			"outputs": [
+				{ "internalType": "address", "name": "channelAddress", "type": "address" },
+				{ "internalType": "string", "name": "title", "type": "string" },
+				{ "internalType": "string", "name": "imageUrl", "type": "string" },
+				{ "internalType": "address", "name": "owner", "type": "address" },
+				{ "internalType": "bool", "name": "deleted", "type": "bool" }
+			],
 			"stateMutability": "view",
 			"type": "function"
 		},
@@ -29,8 +71,12 @@
 					"components": [
 						{ "internalType": "address", "name": "owner", "type": "address" },
 						{ "internalType": "string", "name": "title", "type": "string" },
-						{ "internalType": "string", "name": "symbol", "type": "string" },
-						{ "internalType": "string", "name": "description", "type": "string" }
+						{ "internalType": "string", "name": "link", "type": "string" },
+						{ "internalType": "string", "name": "language", "type": "string" },
+						{ "internalType": "string", "name": "description", "type": "string" },
+						{ "internalType": "string", "name": "copyright", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
 					],
 					"internalType": "struct Channel.ChannelParams",
 					"name": "channel",
@@ -43,24 +89,83 @@
 			"type": "function"
 		},
 		{
-			"inputs": [{ "internalType": "string", "name": "title", "type": "string" }],
-			"name": "getChannelByTitle",
-			"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+			"inputs": [{ "internalType": "address", "name": "channelAddress", "type": "address" }],
+			"name": "getChannelInfo",
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "channelAddress", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct ChannelFactory.ChannelInfo",
+					"name": "",
+					"type": "tuple"
+				}
+			],
 			"stateMutability": "view",
 			"type": "function"
 		},
 		{
 			"inputs": [],
 			"name": "getChannels",
-			"outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }],
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "channelAddress", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct ChannelFactory.ChannelInfo[]",
+					"name": "",
+					"type": "tuple[]"
+				}
+			],
 			"stateMutability": "view",
 			"type": "function"
 		},
 		{
 			"inputs": [{ "internalType": "address", "name": "owner", "type": "address" }],
 			"name": "getChannelsByOwner",
-			"outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }],
+			"outputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "channelAddress", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct ChannelFactory.ChannelInfo[]",
+					"name": "",
+					"type": "tuple[]"
+				}
+			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{ "internalType": "address", "name": "channelAddress", "type": "address" },
+						{ "internalType": "string", "name": "title", "type": "string" },
+						{ "internalType": "string", "name": "imageUrl", "type": "string" },
+						{ "internalType": "address", "name": "owner", "type": "address" },
+						{ "internalType": "bool", "name": "deleted", "type": "bool" }
+					],
+					"internalType": "struct ChannelFactory.ChannelInfo",
+					"name": "channelInfo",
+					"type": "tuple"
+				}
+			],
+			"name": "updateChannel",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		}
 	]

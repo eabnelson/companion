@@ -117,6 +117,7 @@ contract Channel {
 				ChannelFactory.ChannelInfo({
 					channelAddress: address(this), // address can't change
 					title: channelParams.title,
+					imageUrl: channelParams.imageUrl,
 					owner: channelParams.owner,
 					deleted: channelParams.deleted
 				})
@@ -190,6 +191,7 @@ contract Channel {
 		require(channelParams.owner != address(0), 'owner is required');
 		require(bytes(channelParams.title).length > 0, 'title is required');
 		require(bytes(channelParams.link).length > 0, 'link is required');
+		require(bytes(channelParams.imageUrl).length > 0, 'imageUrl is required');
 		require(bytes(channelParams.language).length > 0, 'language is required');
 		require(bytes(channelParams.description).length > 0, 'description is required');
 	}

@@ -9,6 +9,15 @@ const ChannelFactory = require('../../../../abi/ChannelFactory.json');
 
 const { api } = apiEnv;
 
+const escapeXmlSpecialChars = (str: string) => {
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;');
+};
+
 @Controller()
 export class AppController {
 	private provider: ethers.JsonRpcProvider;
@@ -35,7 +44,15 @@ export class AppController {
 	@Get('channels')
 	async getChannels(@Req() request: Request, @Res() res: Response) {
 		try {
-			const channels = await this.channelFactory.getChannels();
+			const channels = (await this.channelFactory.getChannels()).map((channel) => {
+				return {
+					address: channel.channelAddress,
+					title: channel.title,
+					image: channel.imageUrl,
+					owner: channel.owner,
+					deleted: channel.deleted
+				};
+			});
 			return res.json({ channels });
 		} catch (error) {
 			return res
@@ -49,7 +66,17 @@ export class AppController {
 	async getUserChannels(@Req() request: Request, @Res() res: Response) {
 		try {
 			const userAddress = request.params.userAddress;
-			const channels = await this.channelFactory.getChannelsByOwner(userAddress);
+			const channels = (await this.channelFactory.getChannelsByOwner(userAddress)).map(
+				(channel) => {
+					return {
+						address: channel.channelAddress,
+						title: channel.title,
+						image: channel.imageUrl,
+						owner: channel.owner,
+						deleted: channel.deleted
+					};
+				}
+			);
 			return res.json({ channels });
 		} catch (error) {
 			return res
@@ -66,21 +93,50 @@ export class AppController {
 
 			const channelDetails = await channel.queryChannel();
 
-			const [owner, title, symbol, description] = channelDetails[0];
+			const [owner, title, link, language, description, copyright, imageUrl, deleted] =
+				channelDetails[0];
 
 			const posts = channelDetails[1]
 				.map((item) => {
-					const [, author, authorName, title, link, description, content, deleted] = item;
-					return (
-						!deleted && {
-							title: title,
-							link: link,
-							description: description,
-							content: content,
-							author: authorName,
-							authorAddress: author
+					const [
+						,
+						author,
+						guid,
+						title,
+						pubDate,
+						authorName,
+						description,
+						content,
+						deleted
+					] = item;
+
+					if (deleted) {
+						return null;
+					}
+
+					return {
+						authorAddress: author,
+						guid: {
+							_attributes: {
+								isPermaLink: 'false'
+							},
+							_text: guid
+						},
+						title: title,
+						pubDate: pubDate,
+						author: authorName,
+						description: description,
+						'content:encoded': {
+							_cdata: description
+						},
+						enclosure: {
+							_attributes: {
+								length: '0',
+								type: 'audio/mpeg',
+								url: escapeXmlSpecialChars(content)
+							}
 						}
-					);
+					};
 				})
 				.filter(Boolean); // Filter out deleted posts or mapping returned falsy
 
@@ -90,8 +146,21 @@ export class AppController {
 					channel: {
 						ownerAddress: owner,
 						title: title,
-						symbol: symbol,
+						language: language,
+						link: link,
 						description: description,
+						image: {
+							url: {
+								_text: imageUrl
+							},
+							title: {
+								_text: title
+							},
+							link: {
+								_text: link
+							}
+						},
+						copyright: copyright,
 						item: posts
 					}
 				}
@@ -116,26 +185,28 @@ export class AppController {
 
 			const channelDetails = await channel.queryChannel();
 
-			const [owner, title, symbol, description] = channelDetails[0];
+			const [owner, title, link, , description, , imageUrl] = channelDetails[0];
 
 			// Create a structured Channel object
 			const channelData = {
 				owner,
 				title,
-				symbol,
-				description
+				link,
+				description,
+				imageUrl
 			};
 
 			// Create a structured Post array and filter out the deleted posts
 			const posts = channelDetails[1]
 				.map((item) => {
-					const [id, author, authorName, title, link, description, content, deleted] =
+					const [, author, , title, pubDate, authorName, description, content, deleted] =
 						item;
 					return (
 						!deleted && {
 							title,
 							link,
 							description,
+							pubDate,
 							content,
 							author: authorName,
 							authorAddress: author
@@ -152,7 +223,7 @@ export class AppController {
 		}
 	}
 
-	// TODO DELETE POST ENDPOINTS
+	// TODO DELETE POST ENDPOINTS ONLY FOR TESTING
 
 	// Create a new post for a channel
 	@Post('channel/:channelAddress/create-post')
@@ -231,9 +302,10 @@ export class AppController {
 			const updatedPost = [
 				post.id, // id
 				post.author, // author
-				authorName ?? post.authorName,
+				post.guid, // guid
 				title ?? post.title,
-				link ?? post.link,
+				post.pubDate, // pubDate
+				authorName ?? post.authorName,
 				description ?? post.description,
 				content ?? post.content,
 				post.deleted // deleted

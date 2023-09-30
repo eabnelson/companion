@@ -2,15 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAccount } from 'wagmi';
 import { webEnv } from '../../../../environments/environments';
 
 const env = webEnv;
 
 const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 	const router = useRouter();
+	const { address } = useAccount();
 
 	const channelAddress = params.channelAddress;
 	const [channelDetails, setChannelDetails] = useState(null);
+	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
 	useEffect(() => {
 		if (channelAddress) {
@@ -25,54 +28,100 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 		return <div className="flex h-screen items-center justify-center">loading...</div>;
 	}
 
-	const { channel: channelData, posts } = channelDetails;
+	const { channel: channelData, posts } = channelDetails as any;
 
 	return (
 		<div className="bg-primary flex flex-col items-center justify-center px-4 py-10 pt-20 sm:px-0">
 			<div className="bg-secondary w-full max-w-md space-y-2 rounded-lg p-6 shadow-md">
-				<h1 className="text-primaryText mb-4 text-center text-2xl font-bold">
-					{(channelData as any).title}
-				</h1>
-				<p className="text-primaryText">
-					<span className="font-bold">Owner: </span>
-					<span className="font-normal">
-						{(channelData as any).owner.substring(0, 4)}...
-						{(channelData as any).owner.slice(-4)}
-					</span>
-				</p>
-				<p className="text-primaryText">
-					<span className="font-bold">Symbol: </span>
-					<span className="font-normal">{(channelData as any).symbol}</span>
-				</p>
-				<p className="text-primaryText">
-					<span className="font-bold">Description: </span>
-					<span className="font-normal">{(channelData as any).description}</span>
-				</p>
-				<h2 className="text-primaryText mb-2 text-center text-2xl font-bold">Posts</h2>
+				<div className="bg-secondary flex w-full max-w-md items-center space-y-2 rounded-lg p-6 shadow-md">
+					<img
+						src={channelData.imageUrl}
+						alt={channelData.title}
+						className="mr-4 h-auto w-1/3 cursor-pointer rounded"
+					/>
+					<div className="flex flex-col items-start justify-start">
+						<div className="text-primaryText mb-4 text-3xl font-bold">
+							{channelData.title}
+						</div>
+						<div className="mb-2 text-sm font-bold">
+							Author:
+							<a
+								href={`${env.basescan.url}/address/${channelData.owner}`}
+								className="text-primary bg-secondary rounded px-2 py-1"
+							>
+								{channelData.owner.slice(0, 4)}....{channelData.owner.slice(-4)}
+							</a>
+						</div>
+						<div className="flex items-start space-x-2 text-sm">
+							<a
+								href={`${env.api.apiUrl}/channelFeed/${channelAddress}`}
+								className="text-primary bg-secondary rounded py-1"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								🔗 RSS
+							</a>
+							<a
+								href={`${env.basescan.url}/address/${channelData.address}`}
+								className="text-primary bg-secondary rounded px-2 py-1"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								📄 Contract
+							</a>
+						</div>
+					</div>
+				</div>
+				<h2 className="text-primary mb-2 py-3 text-center text-2xl font-bold">Episodes</h2>
 				<ul className="space-y-4">
 					{(posts as any).map((post: any, index: any) => (
 						<li key={index} className="bg-primary mb-4 rounded-lg p-4 shadow-md">
-							<h3 className="text-primaryText mb-2 text-lg font-bold">
+							<h3 className="text-primaryText mb-2 text-xl font-bold">
 								<span className="font-bold">{post.title}</span>
 							</h3>
 							<p className="mb-2">
-								<span className="font-bold">Description: </span>
-								<span className="font-normal">{post.description}</span>
+								<span className="font-normal">
+									{isDescriptionExpanded
+										? post.description
+										: `${post.description.substring(0, 157)}...`}
+								</span>
+								{post.description.length > 4 && (
+									<a
+										href="#"
+										style={{ marginLeft: '10px' }} // Add space before the link
+										className="text-secondary"
+										onClick={(e) => {
+											e.preventDefault();
+											setIsDescriptionExpanded(!isDescriptionExpanded);
+										}}
+									>
+										{isDescriptionExpanded ? 'see less' : 'see more'}
+									</a>
+								)}
 							</p>
-							<p className="mb-2">
-								<span className="font-bold">Author: </span>
-								<span className="font-normal">{post.author}</span>
-							</p>
+							<div className="mb-2">
+								<div className="flex justify-between">
+									<span className="font-normal">{post.author}</span>
+									<span className="font-normal">
+										{post.authorAddress.slice(0, 4)}....
+										{post.authorAddress.slice(-4)}
+									</span>
+								</div>
+							</div>
 						</li>
 					))}
-					<li>
-						<button
-							onClick={() => router.push(`/channel/${channelAddress}/create-post`)}
-							className="bg-primary text-primaryText mx-auto w-full rounded px-2 py-1 text-center"
-						>
-							+ new post +
-						</button>
-					</li>
+					{address && address === channelData.owner && (
+						<li>
+							<button
+								onClick={() =>
+									router.push(`/channel/${channelAddress}/create-post`)
+								}
+								className="bg-primary text-primaryText mx-auto w-full rounded px-2 py-1 text-center"
+							>
+								↗️ new episode ↗️
+							</button>
+						</li>
+					)}
 				</ul>
 			</div>
 		</div>
