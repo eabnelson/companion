@@ -88,7 +88,7 @@ const ChannelList = () => {
 					rel="noopener noreferrer"
 					className="text-secondary"
 				>
-					built by erik <FontAwesomeIcon icon={faXTwitter as any} />
+					ownmyrss.com - built by erik <FontAwesomeIcon icon={faXTwitter as any} />
 				</a>
 			</div>
 		</div>
