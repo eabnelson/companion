@@ -5,13 +5,12 @@ const isProd = process.env.ENV === 'production';
 export const apiEnv: IApiEnv = {
 	api: {
 		isProd: isProd,
-		port: isProd ? Number(process.env.PORT) : Number(process.env.API_PORT),
+		port: isProd ? Number(process.env.PORT) : Number(process.env.PORT),
 		host: isProd ? process.env.API_HOST_PROD : process.env.API_HOST,
 		appUri: isProd ? process.env.APP_URL_PROD : process.env.APP_URL,
 		apiUri: isProd ? process.env.API_URL_PROD : process.env.API_URL,
 		domain: isProd ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV,
-		rpc: isProd ? process.env.RPC_PROD : process.env.RPC_DEV,
-		pk: isProd ? process.env.PK_PROD : process.env.PK_DEV
+		rpc: isProd ? process.env.RPC_PROD : process.env.RPC_DEV
 	}
 };
 
@@ -24,6 +23,5 @@ export interface IApiEnv {
 		apiUri: string;
 		domain: string;
 		rpc: string;
-		pk: string;
 	};
 }
