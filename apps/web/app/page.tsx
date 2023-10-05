@@ -1,11 +1,11 @@
 'use client';
 
-import CreateChannel from './channel/create/page';
+import ChannelList from './channel/list/page';
 
 export default function Page() {
 	return (
 		<div>
-			<CreateChannel />
+			<ChannelList />
 		</div>
 	);
 }
