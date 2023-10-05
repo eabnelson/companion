@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { webEnv } from '../../../environments/environments';
 import { useRouter } from 'next/navigation';
+import { webEnv } from '../../../environments/environments';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 
 const env = webEnv;
 
@@ -78,6 +80,17 @@ const ChannelList = () => {
 					</div>
 				</div>
 			))}
+
+			<div className="fixed inset-x-0 bottom-0 flex items-center justify-center p-4">
+				<a
+					href="https://x.com/eabnelson"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-secondary"
+				>
+					built by erik <FontAwesomeIcon icon={faXTwitter as any} />
+				</a>
+			</div>
 		</div>
 	);
 };

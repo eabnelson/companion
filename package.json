@@ -15,7 +15,7 @@
 		"@chakra-ui/icons": "^2.1.0",
 		"@chakra-ui/react": "^2.8.0",
 		"@ethersproject/units": "^5.7.0",
-		"@fortawesome/free-brands-svg-icons": "^6.4.0",
+		"@fortawesome/free-brands-svg-icons": "^6.4.2",
 		"@fortawesome/react-fontawesome": "^0.2.0",
 		"@magiclabs/wagmi-connector": "^1.1.1",
 		"@magiclabs/web3-react": "^0.0.10",
