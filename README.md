@@ -1,4 +1,4 @@
-# OWNMYRSS
+# OWNMYRSS.COM
 
 digitally authenticate and publish your rss feeds
 
