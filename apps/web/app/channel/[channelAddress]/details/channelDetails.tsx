@@ -14,6 +14,19 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 	const channelAddress = params.channelAddress;
 	const [channelDetails, setChannelDetails] = useState(null);
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+	const [copySuccess, setCopySuccess] = useState('');
+
+	const copyToClipboard = async (e: React.MouseEvent) => {
+		e.preventDefault();
+		try {
+			await navigator.clipboard.writeText(`${env.api.apiUrl}/channelFeed/${channelAddress}`);
+			setCopySuccess('✅ Copied ✅');
+		} catch (err) {
+			setCopySuccess('Failed to copy text');
+		}
+
+		setTimeout(() => setCopySuccess(''), 2000);
+	};
 
 	useEffect(() => {
 		if (channelAddress) {
@@ -56,11 +69,13 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 							<a
 								href={`${env.api.apiUrl}/channelFeed/${channelAddress}`}
 								className="text-primary bg-secondary rounded py-1"
+								onClick={copyToClipboard}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								🔗 RSS
+								{copySuccess ? copySuccess : '🔗 RSS'}
 							</a>
+
 							<a
 								href={`${env.basescan.url}/address/${channelData.address}`}
 								className="text-primary bg-secondary rounded px-2 py-1"
@@ -102,10 +117,15 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 							<div className="mb-2">
 								<div className="flex justify-between">
 									<span className="font-normal">{post.author}</span>
-									<span className="font-normal">
+									<a
+										href={`${env.basescan.url}/address/${post.authorAddress}`}
+										className="text-secondary font-normal"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
 										{post.authorAddress.slice(0, 4)}....
 										{post.authorAddress.slice(-4)}
-									</span>
+									</a>
 								</div>
 							</div>
 						</li>

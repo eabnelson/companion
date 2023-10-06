@@ -15,6 +15,12 @@ const ChannelList = () => {
 	const [channels, setChannels] = useState([]);
 	const [copiedChannel, setCopiedChannel] = useState('');
 
+	const copyToClipboard = (url: string, channel: string) => {
+		navigator.clipboard.writeText(url);
+		setCopiedChannel(channel);
+		setTimeout(() => setCopiedChannel(''), 2000);
+	};
+
 	useEffect(() => {
 		fetch(`${env.api.apiUrl}/channels`)
 			.then((response) => response.json())
@@ -24,15 +30,9 @@ const ChannelList = () => {
 			.catch((error) => console.error('Error:', error));
 	}, [copiedChannel]);
 
-	const copyToClipboard = (url: string, channelAddress: string) => {
-		navigator.clipboard.writeText(url);
-		setCopiedChannel(channelAddress);
-		setTimeout(() => setCopiedChannel(''), 700);
-	};
-
 	return (
 		<div className="bg-primary flex flex-col items-center justify-center space-y-8 px-4 py-10 pt-20 sm:px-0">
-			{channels.reverse().map((channel: any, index) => (
+			{channels.map((channel: any, index) => (
 				<div
 					key={index}
 					className="bg-secondary flex w-full max-w-md items-center space-y-2 rounded-lg p-6 shadow-md"
@@ -63,10 +63,17 @@ const ChannelList = () => {
 							<a
 								href={`${env.api.apiUrl}/channelFeed/${channel.address}`}
 								className="text-primary bg-secondary rounded py-1"
+								onClick={(e) => {
+									e.preventDefault();
+									copyToClipboard(
+										`${env.api.apiUrl}/channelFeed/${channel.address}`,
+										channel.address
+									);
+								}}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								🔗 RSS
+								{copiedChannel === channel.address ? '✅ Copied ✅' : '🔗 RSS'}
 							</a>
 							<a
 								href={`${env.basescan.url}/address/${channel.address}`}
