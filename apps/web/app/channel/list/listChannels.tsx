@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { webEnv } from '../../../environments/environments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faXTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const env = webEnv;
 
@@ -88,14 +88,22 @@ const ChannelList = () => {
 				</div>
 			))}
 
-			<div className="fixed inset-x-0 bottom-0 flex items-center justify-center p-4">
+			<div className="fixed inset-x-0 bottom-0 flex flex-row items-center justify-center p-4">
 				<a
 					href="https://x.com/eabnelson"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="text-secondary"
+					className="text-secondary text-lg"
 				>
-					ownmyrss.com - built by erik <FontAwesomeIcon icon={faXTwitter as any} />
+					built by erik <FontAwesomeIcon icon={faXTwitter as any} />
+				</a>
+				<a
+					href="https://github.com/eabnelson/companion"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-secondary ml-6 text-lg"
+				>
+					how? <FontAwesomeIcon icon={faGithub as any} />
 				</a>
 			</div>
 		</div>
