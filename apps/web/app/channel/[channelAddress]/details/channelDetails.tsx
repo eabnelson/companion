@@ -54,7 +54,9 @@ const ChannelDetails = ({ params }: { params: { channelAddress: string } }) => {
 					/>
 					<div className="flex flex-col items-start justify-start">
 						<div className="text-primaryText mb-4 text-3xl font-bold">
-							{channelData.title}
+							{channelData.title.length > 40
+								? `${channelData.title.substring(0, 40)}...`
+								: channelData.title}
 						</div>
 						<div className="mb-2 text-sm font-bold">
 							Author:
